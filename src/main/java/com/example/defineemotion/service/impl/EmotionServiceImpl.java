@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.defineemotion.dto.EmotionResponseDto;
+import com.example.defineemotion.mapper.EmotionMapper;
 import com.example.defineemotion.model.Emotion;
 import com.example.defineemotion.repository.EmotionRepository;
 import com.example.defineemotion.service.EmotionService;
@@ -13,9 +14,11 @@ import com.example.defineemotion.service.EmotionService;
 @Service
 public class EmotionServiceImpl implements EmotionService {
     private final EmotionRepository emotionRepository;
+    private final EmotionMapper emotionMapper;
 
-    public EmotionServiceImpl(EmotionRepository emotionRepository) {
+    public EmotionServiceImpl(EmotionRepository emotionRepository, EmotionMapper emotionMapper) {
         this.emotionRepository = emotionRepository;
+        this.emotionMapper = emotionMapper;
     }
 
     @Override
@@ -24,23 +27,13 @@ public class EmotionServiceImpl implements EmotionService {
         emotion.setText(text);
         emotion.setMood(mood);
         Emotion savedEmotion = emotionRepository.save(emotion);
-        return new EmotionResponseDto(
-            savedEmotion.getId(),
-            savedEmotion.getText(),
-            savedEmotion.getMood(),
-            savedEmotion.getTimestamp()
-        );
+        return emotionMapper.toDto(savedEmotion);
     }
 
     @Override
     public List<EmotionResponseDto> getAllEmotions() {
         return emotionRepository.findAll().stream()
-            .map(emotion -> new EmotionResponseDto(
-                emotion.getId(),
-                emotion.getText(),
-                emotion.getMood(),
-                emotion.getTimestamp()
-            ))
+            .map(emotionMapper::toDto)
             .collect(Collectors.toList());
     }
 }
