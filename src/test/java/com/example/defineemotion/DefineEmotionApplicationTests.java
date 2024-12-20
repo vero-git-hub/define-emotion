@@ -1,4 +1,4 @@
-package com.example.define_emotion;
+package com.example.defineemotion;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

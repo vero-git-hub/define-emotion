@@ -1,4 +1,4 @@
-package com.example.define_emotion;
+package com.example.defineemotion;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
