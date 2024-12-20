@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.defineemotion.model.Emotion;
+import com.example.defineemotion.dto.EmotionRequestDto;
+import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
 
 @RestController
@@ -24,12 +25,12 @@ public class EmotionController {
     }
 
     @PostMapping
-    public Emotion addEmotion(@RequestParam String text, @RequestParam String mood) {
-        return emotionService.addEmotion(text, mood);
+    public EmotionResponseDto addEmotion(@RequestBody EmotionRequestDto emotionRequestDto) {
+        return emotionService.addEmotion(emotionRequestDto.text(), emotionRequestDto.mood());
     }
 
     @GetMapping
-    public List<Emotion> getAllEmotions() {
+    public List<EmotionResponseDto> getAllEmotions() {
         return emotionService.getAllEmotions();
     }
 }
