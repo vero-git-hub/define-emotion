@@ -3,6 +3,7 @@ $(document).ready(function () {
         paging: true,
         searching: true,
         ordering: true,
+        order: [[0, 'desc']],
         lengthMenu: [5, 10, 25],
         language: {
             search: "Filter emotions:",
