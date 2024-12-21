@@ -74,4 +74,57 @@ h1 {
     border-radius: 10px;
     border: 1px solid var(--highlight-color);
     font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.dataTables_filter input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0px 0px 5px var(--highlight-color);
+}
+
+.dataTables_filter {
+    margin-bottom: 20px;
+}
+
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: var(--highlight-color);
+    color: var(--light-color);
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.9rem;
+    }
+    .dataTables_filter input {
+        width: 100%;
+    }
 }
