@@ -1,6 +1,7 @@
 package com.example.defineemotion.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -22,23 +23,24 @@ public class EmotionServiceImpl implements EmotionService {
     }
 
     @Override
-    public EmotionResponseDto addEmotion(String text, String mood) {
+    public Optional<EmotionResponseDto> addEmotion(String text, String mood) {
         if (text == null || text.trim().isEmpty()) {
-            throw new IllegalArgumentException("Text cannot be empty or null");
+            return Optional.empty();
         }
 
         Emotion emotion = new Emotion();
         emotion.setText(text);
         emotion.setMood(mood);
-        
+
         Emotion savedEmotion = emotionRepository.save(emotion);
-        return emotionMapper.toDto(savedEmotion);
+        return Optional.of(emotionMapper.toDto(savedEmotion));
     }
 
     @Override
-    public List<EmotionResponseDto> getAllEmotions() {
-        return emotionRepository.findAll().stream()
+    public Optional<List<EmotionResponseDto>> getAllEmotions() {
+        List<EmotionResponseDto> emotions = emotionRepository.findAll().stream()
             .map(emotionMapper::toDto)
             .collect(Collectors.toList());
+        return emotions.isEmpty() ? Optional.empty() : Optional.of(emotions);
     }
 }

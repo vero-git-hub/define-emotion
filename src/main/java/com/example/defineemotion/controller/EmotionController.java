@@ -6,7 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EmotionController {
@@ -27,7 +32,14 @@ public class EmotionController {
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {
         model.addAttribute("activePage", "view-emotions");
-        model.addAttribute("emotions", emotionService.getAllEmotions());
+
+        Optional<List<EmotionResponseDto>> optionalEmotions = emotionService.getAllEmotions();
+        if (optionalEmotions.isPresent()) {
+            model.addAttribute("emotions", optionalEmotions.get());
+        } else {
+            model.addAttribute("emotions", List.of());
+        }
+
         return "emotions";
     }
 
@@ -41,7 +53,13 @@ public class EmotionController {
     public String processEmotionInput(@RequestParam String text, Model model) {
         try {
             String mood = analyzeMood(text);
-            emotionService.addEmotion(text, mood);
+            Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood);
+
+            if (addedEmotion.isEmpty()) {
+                model.addAttribute("errorMessage", "Failed to save the emotion.");
+                model.addAttribute("activePage", "add-emotion");
+                return "add-emotion";
+            }
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("activePage", "add-emotion");
@@ -63,5 +81,4 @@ public class EmotionController {
             return "Neutral";
         }
     }
-    
 }
