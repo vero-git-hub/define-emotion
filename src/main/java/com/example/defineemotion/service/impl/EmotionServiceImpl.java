@@ -23,9 +23,14 @@ public class EmotionServiceImpl implements EmotionService {
 
     @Override
     public EmotionResponseDto addEmotion(String text, String mood) {
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Text cannot be empty or null");
+        }
+
         Emotion emotion = new Emotion();
         emotion.setText(text);
         emotion.setMood(mood);
+        
         Emotion savedEmotion = emotionRepository.save(emotion);
         return emotionMapper.toDto(savedEmotion);
     }
