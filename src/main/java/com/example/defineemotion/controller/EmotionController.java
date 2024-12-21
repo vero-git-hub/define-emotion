@@ -22,7 +22,8 @@ public class EmotionController {
     }
 
     @GetMapping("/")
-    public String showHomePage() {
+    public String showHomePage(Model model) {
+        model.addAttribute("activePage", "home");
         return "index";
     }
 
@@ -33,6 +34,7 @@ public class EmotionController {
 
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {
+        model.addAttribute("activePage", "view-emotions");
         model.addAttribute("emotions", emotionService.getAllEmotions());
         return "emotions";
     }

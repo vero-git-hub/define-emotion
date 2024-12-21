@@ -68,56 +68,6 @@ h1 {
     color: #555;
 }
 
-.navbar {
-    background: var(--primary-color);
-    border-bottom: 2px solid var(--secondary-color);
-    width: 100%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.navbar-brand, .nav-link {
-    color: var(--light-color) !important;
-    font-size: 1.1rem;
-}
-
-.nav-link:hover, .navbar-brand:hover {
-    color: var(--hover-text-color) !important;
-}
-
-.nav-link.active {
-    background-color: var(--secondary-color);
-    border-radius: 5px;
-    padding: 5px 10px;
-    text-decoration: underline;
-    color: var(--hover-text-color) !important;
-}
-
-.btn {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.btn-secondary {
-    background-color: var(--primary-color);
-    border: none;
-    color: var(--light-color);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.btn-secondary:hover {
-    background-color: var(--secondary-color);
-    color: var(--hover-text-color);
-}
-
 .dataTables_wrapper .dataTables_filter input {
     width: 300px;
     padding: 10px;

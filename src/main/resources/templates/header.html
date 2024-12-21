@@ -1,0 +1,18 @@
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg custom-header">
+        <a class="navbar-brand" href="/">Emotion Tracker</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" th:classappend="${activePage == 'home' ? 'active' : ''}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/emotions}" th:classappend="${activePage == 'view-emotions' ? 'active' : ''}">View Emotions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/emotions/input}" th:classappend="${activePage == 'add-emotion' ? 'active' : ''}">Add Emotion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
