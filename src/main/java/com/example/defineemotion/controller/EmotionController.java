@@ -1,9 +1,8 @@
 package com.example.defineemotion.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,8 @@ public class EmotionController {
     }
 
     @GetMapping("/emotions")
-    public List<EmotionResponseDto> getAllEmotions() {
-        return emotionService.getAllEmotions();
+    public String showEmotionList(Model model) {
+        model.addAttribute("emotions", emotionService.getAllEmotions());
+        return "emotions";
     }
 }
