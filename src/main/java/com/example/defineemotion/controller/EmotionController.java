@@ -81,4 +81,13 @@ public class EmotionController {
             return "Neutral";
         }
     }
+
+    @PostMapping("/emotions/delete")
+    public String deleteEmotion(@RequestParam Long id, Model model) {
+        boolean isDeleted = emotionService.deleteEmotionById(id);
+        if (!isDeleted) {
+            model.addAttribute("errorMessage", "Emotion with ID " + id + " not found.");
+        }
+        return "redirect:/emotions";
+    }
 }

@@ -43,4 +43,13 @@ public class EmotionServiceImpl implements EmotionService {
             .collect(Collectors.toList());
         return emotions.isEmpty() ? Optional.empty() : Optional.of(emotions);
     }
+
+    @Override
+    public boolean deleteEmotionById(Long id) {
+        if (emotionRepository.existsById(id)) {
+            emotionRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

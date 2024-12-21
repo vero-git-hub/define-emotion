@@ -11,4 +11,10 @@ $(document).ready(function () {
             emptyTable: "No emotions found."
         }
     });
+
+    $(document).on('submit', '.delete-form', function (event) {
+        if (!confirm("Are you sure you want to delete this emotion?")) {
+            event.preventDefault();
+        }
+    });
 });

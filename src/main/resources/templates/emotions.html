@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/css/emotions.css">
     <link rel="stylesheet" type="text/css" href="/css/buttons.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
@@ -33,6 +34,7 @@
                             <th>Feeling</th>
                             <th>Mood</th>
                             <th>Timestamp</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,6 +43,14 @@
                             <td th:text="${emotion.text}"></td>
                             <td th:text="${emotion.mood}"></td>
                             <td th:text="${emotion.timestamp}"></td>
+                            <td>
+                                <form th:action="@{/emotions/delete}" method="post" class="delete-form d-inline" onsubmit="confirmDelete(event)">
+                                    <input type="hidden" name="id" th:value="${emotion.id}" />
+                                    <button type="submit" class="btn btn-link p-0 border-0 btn-delete" title="Delete">
+                                        <i class="fas fa-times fa-2x"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

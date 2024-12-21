@@ -10,4 +10,6 @@ public interface EmotionService {
     Optional<EmotionResponseDto> addEmotion(String text, String mood);
 
     Optional<List<EmotionResponseDto>> getAllEmotions();
+
+    boolean deleteEmotionById(Long id);
 }
