@@ -3,6 +3,7 @@ package com.example.defineemotion.config;
 import com.example.defineemotion.auth.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,9 +32,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
                     "/", "/css/**", "/js/**", "/images/**", "/favicon.ico", 
-                    "/login", 
-                    "/register"
+                    "/login", "/register", "/h2-console/**"
                 ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/register").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -45,6 +46,14 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .permitAll()
+            )
+            .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/h2-console/**")
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions
+                    .sameOrigin()
+                )
             );
 
         return http.build();

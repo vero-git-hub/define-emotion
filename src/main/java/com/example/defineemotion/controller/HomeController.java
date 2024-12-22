@@ -1,11 +1,23 @@
 package com.example.defineemotion.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.defineemotion.dto.RegisterUserDto;
+import com.example.defineemotion.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String showHomePage(Model model) {
@@ -19,7 +31,24 @@ public class HomeController {
     }
 
     @GetMapping("/register")
-    public String registerPage() {
+    public String registerPage(Model model) {
+        model.addAttribute("registerUser", new RegisterUserDto());
         return "register";
+    }
+
+    @PostMapping("/register")
+    public String processRegistration(
+            @Valid @ModelAttribute("registerUser") RegisterUserDto registerUserDto,
+            BindingResult bindingResult,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+        boolean isRegistered = userService.registerUser(registerUserDto);
+        if (!isRegistered) {
+            model.addAttribute("error", "Username or email already taken.");
+            return "register";
+        }
+        return "redirect:/login";
     }
 }
