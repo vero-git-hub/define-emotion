@@ -45,10 +45,18 @@ public class EmotionServiceImpl implements EmotionService {
     }
 
     @Override
-    public Optional<List<EmotionResponseDto>> getAllEmotions() {
-        List<EmotionResponseDto> emotions = emotionRepository.findAll().stream()
-            .map(emotionMapper::toDto)
-            .collect(Collectors.toList());
+    public Optional<List<EmotionResponseDto>> getAllEmotions(String username) {
+        if (username == null || username.isEmpty()) {
+            return Optional.empty();
+        }
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+                
+        List<EmotionResponseDto> emotions = emotionRepository.findByUser(user).stream()
+                .map(emotionMapper::toDto)
+                .collect(Collectors.toList());
+
         return emotions.isEmpty() ? Optional.empty() : Optional.of(emotions);
     }
 

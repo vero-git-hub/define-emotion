@@ -25,8 +25,16 @@ public class EmotionController {
 
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {
+        String username = (String) model.getAttribute("username");
+
+        if (username == null || username.isEmpty()) {
+            model.addAttribute("error", "User is not authenticated");
+            return "error";
+        }
+
         model.addAttribute("activePage", "view-emotions");
-        model.addAttribute("emotions", emotionService.getAllEmotions().orElse(List.of()));
+        model.addAttribute("emotions", emotionService.getAllEmotions(username).orElse(List.of()));
+        
         return "emotions";
     }
 
