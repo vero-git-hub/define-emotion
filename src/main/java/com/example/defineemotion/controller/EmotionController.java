@@ -39,8 +39,13 @@ public class EmotionController {
     @PostMapping("/emotions/input")
     public String processEmotionInput(@RequestParam String text, Model model) {
         try {
+            String username = (String) model.getAttribute("username");
+            if (username == null) {
+                throw new IllegalStateException("User must be authenticated");
+            }
+
             String mood = analyzeMood(text);
-            Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood);
+            Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood, username);
 
             if (addedEmotion.isEmpty()) {
                 model.addAttribute("errorMessage", "Failed to save the emotion.");
@@ -52,6 +57,7 @@ public class EmotionController {
             model.addAttribute("activePage", "add-emotion");
             return "add-emotion";
         }
+
         return "redirect:/emotions";
     }
 

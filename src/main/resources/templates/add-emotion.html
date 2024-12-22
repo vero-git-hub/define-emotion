@@ -20,7 +20,9 @@
             <span th:text="${errorMessage}"></span>
         </div>
 
-        <form action="/emotions/input" method="post" class="mt-4">
+        <form th:action="@{/emotions/input}" method="post" class="mt-4">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            
             <div class="mb-3">
                 <label for="textInput" class="form-label">Enter your text</label>
                 <textarea id="textInput" name="text" class="form-control" rows="4" placeholder="Write something here..." required></textarea>

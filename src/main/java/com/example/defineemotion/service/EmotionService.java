@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface EmotionService {
 
-    Optional<EmotionResponseDto> addEmotion(String text, String mood);
+    Optional<EmotionResponseDto> addEmotion(String text, String mood, String username);
 
     Optional<List<EmotionResponseDto>> getAllEmotions();
 
