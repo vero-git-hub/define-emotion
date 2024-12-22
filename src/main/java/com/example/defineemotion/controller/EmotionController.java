@@ -23,23 +23,10 @@ public class EmotionController {
         this.emotionService = emotionService;
     }
 
-    @GetMapping("/")
-    public String showHomePage(Model model) {
-        model.addAttribute("activePage", "home");
-        return "index";
-    }
-
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {
         model.addAttribute("activePage", "view-emotions");
-
-        Optional<List<EmotionResponseDto>> optionalEmotions = emotionService.getAllEmotions();
-        if (optionalEmotions.isPresent()) {
-            model.addAttribute("emotions", optionalEmotions.get());
-        } else {
-            model.addAttribute("emotions", List.of());
-        }
-
+        model.addAttribute("emotions", emotionService.getAllEmotions().orElse(List.of()));
         return "emotions";
     }
 
