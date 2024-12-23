@@ -60,3 +60,10 @@
         transform: scale(1.2) rotate(360deg);
     }
 }
+
+.btn-info {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 5px;
+}

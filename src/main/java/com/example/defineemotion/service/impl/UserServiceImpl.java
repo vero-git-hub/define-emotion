@@ -1,6 +1,7 @@
 package com.example.defineemotion.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,17 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @Override
+    public String getCurrentUserEmail(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getEmail)
+                .orElse("Email not found");
     }
 }
