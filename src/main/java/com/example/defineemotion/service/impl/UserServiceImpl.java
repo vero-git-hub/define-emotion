@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.defineemotion.dto.EditProfileDto;
 import com.example.defineemotion.dto.RegisterUserDto;
 import com.example.defineemotion.mapper.UserMapper;
 import com.example.defineemotion.model.User;
@@ -47,5 +48,33 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username)
                 .map(User::getEmail)
                 .orElse("Email not found");
+    }
+
+    @Override
+    public RegisterUserDto getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+    }
+
+    @Override
+    public void updateUserProfile(EditProfileDto editProfileDto) {
+        String currentUsername = getCurrentUsername();
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        
+        user.setEmail(editProfileDto.getEmail());
+        userRepository.save(user);
+    }
+
+    @Override
+    public EditProfileDto getEditProfileByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> {
+                    EditProfileDto dto = new EditProfileDto();
+                    dto.setEmail(user.getEmail());
+                    return dto;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

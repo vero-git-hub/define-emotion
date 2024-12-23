@@ -5,4 +5,5 @@ import com.example.defineemotion.model.User;
 
 public interface UserMapper {
     User toEntity(RegisterUserDto dto);
+    RegisterUserDto toDto(User user);
 }

@@ -21,4 +21,17 @@ public class UserMapperImpl implements UserMapper {
         user.setPassword(dto.getPassword());
         return user;
     }
+
+    @Override
+    public RegisterUserDto toDto(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        return new RegisterUserDto(
+            user.getUsername(),
+            user.getEmail(),
+            null
+        );
+    }
 }

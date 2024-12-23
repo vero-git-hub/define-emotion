@@ -1,5 +1,6 @@
 package com.example.defineemotion.service;
 
+import com.example.defineemotion.dto.EditProfileDto;
 import com.example.defineemotion.dto.RegisterUserDto;
 
 public interface UserService {
@@ -9,4 +10,10 @@ public interface UserService {
     String getCurrentUsername();
 
     String getCurrentUserEmail(String username);
+
+    RegisterUserDto getUserByUsername(String username);
+
+    void updateUserProfile(EditProfileDto editProfileDto);
+
+    EditProfileDto getEditProfileByUsername(String username);
 }
