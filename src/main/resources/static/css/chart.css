@@ -1,0 +1,12 @@
+#emotionChart {
+    max-width: 400px;
+    max-height: 400px;
+    margin: 0 auto;
+    display: block;
+    aspect-ratio: 1 / 1;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}

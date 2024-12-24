@@ -13,8 +13,11 @@
                     <a class="nav-link" th:href="@{/emotions/input}" th:classappend="${activePage == 'add-emotion' ? 'active' : ''}">Add Emotion</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="@{/emotions/chart}">Emotion Chart</a>
+                </li>                
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/profile}" th:classappend="${activePage == 'profile' ? 'active' : ''}">Profile</a>
-                </li>          
+                </li>        
             </ul>
         </div>
     </nav>

@@ -68,4 +68,13 @@ public class EmotionServiceImpl implements EmotionService {
         }
         return false;
     }
+
+    @Override
+    public List<EmotionResponseDto> getEmotionsByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return emotionRepository.findByUser(user).stream()
+                .map(emotionMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

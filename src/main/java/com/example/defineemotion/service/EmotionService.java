@@ -12,4 +12,6 @@ public interface EmotionService {
     Optional<List<EmotionResponseDto>> getAllEmotions(String username);
 
     boolean deleteEmotionById(Long id);
+
+    List<EmotionResponseDto> getEmotionsByUsername(String username);
 }

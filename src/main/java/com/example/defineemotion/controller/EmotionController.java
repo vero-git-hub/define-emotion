@@ -1,11 +1,13 @@
 package com.example.defineemotion.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
@@ -90,5 +92,17 @@ public class EmotionController {
             model.addAttribute("errorMessage", "Emotion with ID " + id + " not found.");
         }
         return "redirect:/emotions";
+    }
+
+    @GetMapping("/emotions/chart-data")
+    @ResponseBody
+    public List<EmotionResponseDto> getEmotionChartData() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return emotionService.getEmotionsByUsername(username);
+    }
+
+    @GetMapping("/emotions/chart")
+    public String showEmotionChart() {
+        return "chart";
     }
 }
