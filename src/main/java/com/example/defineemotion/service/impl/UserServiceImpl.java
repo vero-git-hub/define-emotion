@@ -62,8 +62,13 @@ public class UserServiceImpl implements UserService {
         String currentUsername = getCurrentUsername();
         User user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        
         user.setEmail(editProfileDto.getEmail());
+        user.setPhoneNumber(editProfileDto.getPhoneNumber());
+        user.setCountry(editProfileDto.getCountry());
+        user.setCity(editProfileDto.getCity());
+        user.setStreet(editProfileDto.getStreet());
+        user.setHouse(editProfileDto.getHouse());
+
         userRepository.save(user);
     }
 
@@ -73,6 +78,11 @@ public class UserServiceImpl implements UserService {
                 .map(user -> {
                     EditProfileDto dto = new EditProfileDto();
                     dto.setEmail(user.getEmail());
+                    dto.setPhoneNumber(user.getPhoneNumber());
+                    dto.setCountry(user.getCountry());
+                    dto.setCity(user.getCity());
+                    dto.setStreet(user.getStreet());
+                    dto.setHouse(user.getHouse());
                     return dto;
                 })
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));

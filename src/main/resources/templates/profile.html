@@ -22,17 +22,46 @@
             <div class="card-body">
                 <h5 class="card-title">Welcome, <span th:text="${username}"></span>!</h5>
                 <p class="card-text">Email: <span th:text="${email}"></span></p>
-    
+                <p class="card-text" th:if="${editMode == null || !editMode}">
+                    <b>Address:</b> 
+                    <span th:text="${#strings.join(#arrays.array(user.country, user.city, user.street, user.house), ', ')}"
+                          th:unless="${user == null}">No address</span>
+                </p>
                 <div th:if="${editMode == null || !editMode}" class="text-center mt-3">
                     <a th:href="@{/profile(editMode=true)}" class="btn btn-primary">Edit Profile</a>
                 </div>
-               
                 <form th:if="${editMode}" th:action="@{/profile}" th:object="${user}" method="post">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" th:field="*{email}" required>
                         <div class="text-danger" th:errors="*{email}"></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">phoneNumber</label>
+                        <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}">
+                        <div class="text-danger" th:errors="*{phoneNumber}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" th:field="*{country}">
+                        <div class="text-danger" th:errors="*{country}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" th:field="*{city}">
+                        <div class="text-danger" th:errors="*{city}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="street" class="form-label">Street</label>
+                        <input type="text" class="form-control" id="street" th:field="*{street}">
+                        <div class="text-danger" th:errors="*{street}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="house" class="form-label">House</label>
+                        <input type="text" class="form-control" id="house" th:field="*{house}">
+                        <div class="text-danger" th:errors="*{house}"></div>
+                    </div>
+
                     <div class="text-center">
                         <button type="submit" class="btn btn-success">Save Changes</button>
                         <a th:href="@{/profile}" class="btn btn-secondary">Cancel</a>
