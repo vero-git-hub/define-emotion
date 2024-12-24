@@ -1,5 +1,20 @@
+function confirmDelete(event) {
+    if (!confirm("Are you sure you want to delete this emotion?")) {
+        event.preventDefault(); 
+        console.log("Deletion cancelled");
+    } else {
+        console.log("Deletion confirmed");
+    }
+}
+
 $(document).ready(function () {
-    $('.table').DataTable({
+    $('.delete-form').on('submit', function (event) {
+        if (!confirm("Are you sure you want to delete this emotion?")) {
+            event.preventDefault();
+        }
+    });
+    
+    $('#emotionsTable').DataTable({
         paging: true,
         searching: true,
         ordering: true,
@@ -10,12 +25,6 @@ $(document).ready(function () {
             lengthMenu: "Show _MENU_ entries",
             info: "Showing _START_ to _END_ of _TOTAL_ emotions",
             emptyTable: "No emotions found."
-        }
-    });
-
-    $(document).on('submit', '.delete-form', function (event) {
-        if (!confirm("Are you sure you want to delete this emotion?")) {
-            event.preventDefault();
         }
     });
 });

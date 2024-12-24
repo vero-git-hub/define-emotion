@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
     <title>Emotion List</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/emotions.css">
-    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
-    <link rel="stylesheet" type="text/css" href="/css/header.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" 
+          href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/emotions.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/buttons.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 </head>
 <body>
     <div th:replace="header :: header"></div>
 
     <div class="container mt-4">
         <h1>Emotion List</h1>
+        <div th:if="${errorMessage}" class="alert alert-danger text-center mt-4">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success text-center mt-4">
+            <span th:text="${successMessage}"></span>
+        </div>
+
         <div th:if="${emotions.isEmpty()}">
             <div class="alert alert-info text-center mt-4">
                 <h3>No emotions found!</h3>
@@ -25,6 +33,7 @@
                 <a href="/emotions/input" class="btn btn-primary">Add Emotion</a>
             </div>
         </div>
+
         <div th:if="${!emotions.isEmpty()}" class="table-responsive">
             <div class="table-container">
                 <table id="emotionsTable" class="table table-striped table-bordered table-hover mt-4">
@@ -38,30 +47,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="emotion : ${emotions}">
-                            <td th:text="${emotion.id}"></td>
-                            <td th:text="${emotion.text}"></td>
-                            <td th:text="${emotion.mood}"></td>
-                            <td th:text="${emotion.timestamp}"></td>
-                            <td>
-                                <form th:action="@{/emotions/delete}" method="post" class="delete-form d-inline" onsubmit="confirmDelete(event)">
-                                    <input type="hidden" name="id" th:value="${emotion.id}" />
-                                    <button type="submit" class="btn btn-link p-0 border-0 btn-delete" title="Delete">
-                                        <i class="fas fa-times fa-lg"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr th:each="emotion : ${emotions}">
+                        <td th:text="${emotion.id}">1</td>
+                        <td th:text="${emotion.text}">Happy example</td>
+                        <td th:text="${emotion.mood}">Happy</td>
+                        <td th:text="${emotion.timestamp}">2024-01-01</td>
+                        <td>
+                            <form th:action="@{/emotions/delete}" method="post" class="delete-form d-inline">
+                                <input type="hidden" name="id" th:value="${emotion.id}" />
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-link p-0 border-0 btn-delete" 
+                                    title="Delete">
+                                    <i class="fas fa-times fa-lg"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
-        </div>        
+        </div>
         <div class="text-center mt-4">
             <a href="/" class="btn btn-secondary me-2">Back to Home</a>
             <a href="/emotions/input" class="btn btn-primary">Add Emotion</a>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" th:src="@{/js/emotions.js}"></script>
 </body>
 </html>

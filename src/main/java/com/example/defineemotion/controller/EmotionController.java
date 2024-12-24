@@ -1,6 +1,5 @@
 package com.example.defineemotion.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
@@ -18,7 +18,6 @@ import java.util.Optional;
 @Controller
 public class EmotionController {
 
-    @Autowired
     private EmotionService emotionService;
 
     public EmotionController(EmotionService emotionService) {
@@ -27,11 +26,11 @@ public class EmotionController {
 
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {
-        String username = (String) model.getAttribute("username");
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (username == null || username.isEmpty()) {
+        if (username == null || "anonymousUser".equals(username)) {
             model.addAttribute("error", "User is not authenticated");
-            return "error";
+            return "error"; 
         }
 
         model.addAttribute("activePage", "view-emotions");
@@ -47,25 +46,25 @@ public class EmotionController {
     }
 
     @PostMapping("/emotions/input")
-    public String processEmotionInput(@RequestParam String text, Model model) {
-        try {
-            String username = (String) model.getAttribute("username");
-            if (username == null) {
-                throw new IllegalStateException("User must be authenticated");
-            }
+    public String processEmotionInput(@RequestParam String text, RedirectAttributes redirectAttributes) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        if (username == null || "anonymousUser".equals(username)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "User must be authenticated");
+            return "redirect:/emotions"; 
+        }
+
+        try {
             String mood = analyzeMood(text);
             Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood, username);
 
             if (addedEmotion.isEmpty()) {
-                model.addAttribute("errorMessage", "Failed to save the emotion.");
-                model.addAttribute("activePage", "add-emotion");
-                return "add-emotion";
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to save the emotion.");
+                return "redirect:/emotions/input";
             }
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("activePage", "add-emotion");
-            return "add-emotion";
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/emotions/input";
         }
 
         return "redirect:/emotions";
@@ -76,9 +75,11 @@ public class EmotionController {
             throw new IllegalArgumentException("Text cannot be empty");
         }
 
-        if (text.contains("happy") || text.contains("great") || text.contains("good")) {
+        String lowerText = text.toLowerCase();
+
+        if (lowerText.contains("happy") || lowerText.contains("great") || lowerText.contains("good")) {
             return "Happy";
-        } else if (text.contains("sad") || text.contains("bad")) {
+        } else if (lowerText.contains("sad") || lowerText.contains("bad")) {
             return "Sad";
         } else {
             return "Neutral";
@@ -86,10 +87,12 @@ public class EmotionController {
     }
 
     @PostMapping("/emotions/delete")
-    public String deleteEmotion(@RequestParam Long id, Model model) {
+    public String deleteEmotion(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         boolean isDeleted = emotionService.deleteEmotionById(id);
         if (!isDeleted) {
-            model.addAttribute("errorMessage", "Emotion with ID " + id + " not found.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Emotion with ID " + id + " not found.");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Emotion successfully deleted.");
         }
         return "redirect:/emotions";
     }
