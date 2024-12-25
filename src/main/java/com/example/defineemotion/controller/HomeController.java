@@ -28,14 +28,11 @@ public class HomeController {
     public String showHomePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()
-            && !(authentication instanceof AnonymousAuthenticationToken)) {
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
             String username = authentication.getName();
             String country = userService.getCurrentUserCountry(username);
             String city = userService.getCurrentUserCity(username);
             boolean hasAddress = (country != null && !country.isBlank()) && (city != null && !city.isBlank());
-
-            System.out.println("User: " + username + ", Country: " + country + ", City: " + city + ", hasAddress: " + hasAddress);
-
             model.addAttribute("hasAddress", hasAddress);
             if (hasAddress) {
                 model.addAttribute("country", country);
