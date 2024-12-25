@@ -10,9 +10,9 @@ public class EditProfileDto {
     @Email(message = "Email must be in a valid format")
     private String email;
 
-    private String phoneNumber;
+    @NotBlank(message = "Country is required")
     private String country;
+
+    @NotBlank(message = "City is required")
     private String city;
-    private String street;
-    private String house;
 }

@@ -1,5 +1,7 @@
 package com.example.defineemotion.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +23,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/profile")
-    public String userProfile(@RequestParam(value = "editMode", required = false) Boolean editMode, Model model) {
+    public String userProfile(@RequestParam(value = "editMode", required = false) Boolean editMode, 
+                            Model model) {
         String username = userService.getCurrentUsername();
         model.addAttribute("username", username);
         model.addAttribute("email", userService.getCurrentUserEmail(username));
         model.addAttribute("editMode", editMode);
 
+        EditProfileDto userDto = userService.getEditProfileByUsername(username);
+        model.addAttribute("user", userDto);
+
         if (Boolean.TRUE.equals(editMode)) {
-            EditProfileDto userDto = userService.getEditProfileByUsername(username);
-            model.addAttribute("user", userDto);
+            model.addAttribute("countryList", List.of("USA", "Germany", "UK", "France", "Italy"));
+            model.addAttribute("cityList", List.of("New York", "Berlin", "London", "Paris", "Rome"));
         }
 
         return "profile";
