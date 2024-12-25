@@ -1,5 +1,7 @@
 package com.example.defineemotion.controller;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.defineemotion.dto.RegisterUserDto;
 import com.example.defineemotion.service.UserService;
+import org.springframework.security.core.Authentication;
 
 import jakarta.validation.Valid;
 
@@ -23,6 +26,25 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomePage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+            && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            String country = userService.getCurrentUserCountry(username);
+            String city = userService.getCurrentUserCity(username);
+            boolean hasAddress = (country != null && !country.isBlank()) && (city != null && !city.isBlank());
+
+            System.out.println("User: " + username + ", Country: " + country + ", City: " + city + ", hasAddress: " + hasAddress);
+
+            model.addAttribute("hasAddress", hasAddress);
+            if (hasAddress) {
+                model.addAttribute("country", country);
+                model.addAttribute("city", city);
+            }
+        } else {
+            model.addAttribute("hasAddress", false);
+        }
+
         model.addAttribute("activePage", "home");
         return "index";
     }

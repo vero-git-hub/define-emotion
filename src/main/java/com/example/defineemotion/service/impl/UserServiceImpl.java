@@ -1,6 +1,8 @@
 package com.example.defineemotion.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,14 +17,16 @@ import com.example.defineemotion.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserMapper userMapper;
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public boolean registerUser(RegisterUserDto registerUserDto) {
@@ -40,7 +44,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getCurrentUsername() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+            && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return authentication.getName();
+        }
+        return null;
     }
 
     @Override
@@ -60,6 +69,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserProfile(EditProfileDto editProfileDto) {
         String currentUsername = getCurrentUsername();
+        if (currentUsername == null) {
+            throw new IllegalArgumentException("User not authenticated");
+        }
         User user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         user.setEmail(editProfileDto.getEmail());
@@ -80,5 +92,19 @@ public class UserServiceImpl implements UserService {
                     return dto;
                 })
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    @Override
+    public String getCurrentUserCountry(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getCountry)
+                .orElse(null);
+    }
+
+    @Override
+    public String getCurrentUserCity(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::getCity)
+                .orElse(null);
     }
 }

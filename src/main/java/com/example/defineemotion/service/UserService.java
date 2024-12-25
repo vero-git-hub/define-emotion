@@ -16,4 +16,8 @@ public interface UserService {
     void updateUserProfile(EditProfileDto editProfileDto);
 
     EditProfileDto getEditProfileByUsername(String username);
+
+    String getCurrentUserCountry(String username);
+    
+    String getCurrentUserCity(String username);
 }
