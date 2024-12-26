@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CountryCities {
-    private String country;
-    private List<CityHelplines> cities;
+public class CityHelplines {
+    private String name;
+    private List<Helpline> helplines;
 }

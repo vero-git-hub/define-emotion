@@ -1,14 +1,18 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const countrySelect = document.getElementById("countrySelect");
     const citySelect = document.getElementById("citySelect");
-    
+
+    if (!countrySelect || !citySelect) {
+        return;
+    }
+
     function clearCityOptions() {
         while (citySelect.options.length > 0) {
             citySelect.remove(0);
         }
     }
 
-    countrySelect.addEventListener("change", function() {
+    countrySelect.addEventListener("change", function () {
         const selectedCountry = this.value;
         clearCityOptions();
 

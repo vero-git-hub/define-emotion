@@ -32,7 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(
                     "/", "/css/**", "/js/**", "/images/**", "/favicon.ico", 
-                    "/login", "/register", "/h2-console/**"
+                    "/login", "/register", "/h2-console/**", "/site.webmanifest"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/logout").permitAll()

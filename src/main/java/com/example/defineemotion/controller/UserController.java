@@ -1,6 +1,5 @@
 package com.example.defineemotion.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,11 +17,14 @@ import jakarta.validation.Valid;
 @Controller
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
     private GeoDataService geoDataService;
+    
+    public UserController(UserService userService, GeoDataService geoDataService) {
+        this.userService = userService;
+        this.geoDataService = geoDataService;
+    }
 
     @GetMapping("/profile")
     public String userProfile(@RequestParam(value = "editMode", required = false) Boolean editMode, 
@@ -37,6 +39,9 @@ public class UserController {
 
         if (Boolean.TRUE.equals(editMode)) {
             model.addAttribute("countryList", geoDataService.getAllCountries());
+            if (userDto.getCountry() != null) {
+                model.addAttribute("cityList", geoDataService.getCitiesByCountry(userDto.getCountry()));
+            }
         }
 
         return "profile";
@@ -50,7 +55,7 @@ public class UserController {
             model.addAttribute("editMode", true);
             model.addAttribute("countryList", geoDataService.getAllCountries());
             return "profile";
-        }
+        }                              
         userService.updateUserProfile(editProfileDto);
         return "redirect:/profile";
     }
