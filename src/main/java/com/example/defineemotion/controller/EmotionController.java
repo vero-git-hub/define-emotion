@@ -12,17 +12,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class EmotionController {
-
-    private EmotionService emotionService;
-
-    public EmotionController(EmotionService emotionService) {
-        this.emotionService = emotionService;
-    }
+    
+    private final EmotionService emotionService;
 
     @GetMapping("/emotions")
     public String showEmotionList(Model model) {

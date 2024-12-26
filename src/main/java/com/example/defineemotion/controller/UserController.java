@@ -13,18 +13,14 @@ import com.example.defineemotion.service.GeoDataService;
 import com.example.defineemotion.service.UserService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
-
-    private GeoDataService geoDataService;
-    
-    public UserController(UserService userService, GeoDataService geoDataService) {
-        this.userService = userService;
-        this.geoDataService = geoDataService;
-    }
+    private final UserService userService;
+    private final GeoDataService geoDataService;
 
     @GetMapping("/profile")
     public String userProfile(@RequestParam(value = "editMode", required = false) Boolean editMode, 

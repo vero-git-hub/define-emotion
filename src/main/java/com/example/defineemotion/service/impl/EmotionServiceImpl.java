@@ -14,17 +14,15 @@ import com.example.defineemotion.repository.EmotionRepository;
 import com.example.defineemotion.repository.UserRepository;
 import com.example.defineemotion.service.EmotionService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class EmotionServiceImpl implements EmotionService {
+    
     private final EmotionRepository emotionRepository;
     private final EmotionMapper emotionMapper;
     private final UserRepository userRepository;
-
-    public EmotionServiceImpl(EmotionRepository emotionRepository, EmotionMapper emotionMapper, UserRepository userRepository) {
-        this.emotionRepository = emotionRepository;
-        this.emotionMapper = emotionMapper;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Optional<EmotionResponseDto> addEmotion(String text, String mood, String username) {

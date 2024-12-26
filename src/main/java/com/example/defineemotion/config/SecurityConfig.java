@@ -41,7 +41,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/emotions", true)
+                .defaultSuccessUrl("/", true)
                 .permitAll()
             )
             .logout(logout -> logout

@@ -67,10 +67,8 @@
                     <label for="city" class="form-label">City</label>
                     <select class="form-select"
                             id="citySelect"
-                            th:field="*{city}">
-                        <option th:if="${user.city != null}" 
-                                th:value="${user.city}"
-                                th:text="${user.city}"></option>
+                            th:field="*{city}"
+                            th:attr="data-selected-city=${user.city}">
                     </select>
                     <div class="text-danger" th:errors="*{city}"></div>
                 </div>

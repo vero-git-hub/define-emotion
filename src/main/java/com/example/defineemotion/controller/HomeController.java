@@ -14,15 +14,13 @@ import com.example.defineemotion.service.UserService;
 import org.springframework.security.core.Authentication;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-    private UserService userService;
-
-    public HomeController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @GetMapping("/")
     public String showHomePage(Model model) {

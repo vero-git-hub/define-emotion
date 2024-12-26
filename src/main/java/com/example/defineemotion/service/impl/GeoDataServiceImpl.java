@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 @Service
 public class GeoDataServiceImpl implements GeoDataService {
+    
     private static final Logger log = LoggerFactory.getLogger(GeoDataServiceImpl.class);
-
     private final List<CountryCities> geoData = new ArrayList<>();
 
     @PostConstruct
