@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.defineemotion.model.CityHelplines;
 import com.example.defineemotion.model.CountryCities;
+import com.example.defineemotion.model.Helpline;
 import com.example.defineemotion.service.GeoDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -52,5 +53,15 @@ public class GeoDataServiceImpl implements GeoDataService {
                 .toList();
         log.debug("Cities for country {}: {}", country, cities);
         return cities;
+    }
+
+    @Override
+    public List<Helpline> getHelplinesByCountryAndCity(String country, String city) {
+        return geoData.stream()
+                .filter(item -> item.getCountry().equalsIgnoreCase(country))
+                .flatMap(item -> item.getCities().stream())
+                .filter(cityItem -> cityItem.getName().equalsIgnoreCase(city))
+                .flatMap(cityItem -> cityItem.getHelplines().stream())
+                .toList();
     }
 }

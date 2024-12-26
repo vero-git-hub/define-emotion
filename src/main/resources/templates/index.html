@@ -65,14 +65,20 @@
                     <div th:if="${hasAddress}">
                         <p><strong>Your Address:</strong></p>
                         <ul>
-                            <li>Country: <span th:text="${country}">-</span></li>
-                            <li>City: <span th:text="${city}">-</span></li>
+                            <li>Country: <span id="countryInput" th:text="${country}">-</span></li>
+                            <li>City: <span id="cityInput" th:text="${city}">-</span></li>
                         </ul>
                         <button class="btn btn-primary" id="helpBtn">Help</button>
                         <div id="helplineResults" style="display: none; margin-top: 20px;">
                             <h5>Available Helplines:</h5>
-                            <ul id="helplineList">
-                            </ul>
+                            <table id="helplineList">
+                                <tr>
+                                    <th>Organization</th>
+                                    <th>Call</th>
+                                    <th>Website</th>
+                                    <th>Text</th>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                     <div th:if="${!hasAddress}">
