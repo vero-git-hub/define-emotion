@@ -32,17 +32,26 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <td>${item.name}</td>
                                 <td>
                                     ${item.phone ? `
-                                        <button class="btn btn-sm btn-success" onclick="callHotline('${item.phone}')">
+                                        <button class="btn btn-sm btn-success" 
+                                                onclick="handleCall('${item.phone}')" 
+                                                title="Call ${item.phone}">
                                             <i class="fas fa-phone-alt"></i>
                                         </button>` : ""}
                                 </td>
                                 <td>
-                                    ${item.website ? `<a class="btn btn-sm btn-primary ms-2" href="${item.website}" target="_blank">
-                                        <i class="fas fa-globe"></i></a>` : ""}
+                                    ${item.website ? `
+                                        <a class="btn btn-sm btn-primary ms-2" 
+                                                href="${item.website}" 
+                                                target="_blank" 
+                                                title="Visit ${item.website}">
+                                            <i class="fas fa-globe"></i>
+                                        </a>` : ""}
                                 </td>
                                 <td>
                                     ${item.text ? `
-                                        <button class="btn btn-sm btn-primary" onclick="handleText('${item.text}')">
+                                        <button class="btn btn-sm btn-primary" 
+                                                onclick="handleText('${item.text}')" 
+                                                title="Send SMS to ${item.text}">
                                             <i class="fas fa-sms"></i>
                                         </button>` : ""}
                                 </td>
