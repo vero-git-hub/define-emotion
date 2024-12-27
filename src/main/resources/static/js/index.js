@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <td>
                                     ${item.phone ? `
                                         <button class="btn btn-sm btn-success" onclick="callHotline('${item.phone}')">
-                                            <i class="fas fa-phone-alt"></i> Call
+                                            <i class="fas fa-phone-alt"></i>
                                         </button>` : ""}
                                 </td>
                                 <td>
@@ -41,8 +41,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <i class="fas fa-globe"></i></a>` : ""}
                                 </td>
                                 <td>
-                                    ${item.text ? `<a class="btn btn-sm btn-primary ms-2" href="${item.text}" target="_blank">
-                                        <i class="fas fa-sms"></i></a>` : ""}
+                                    ${item.text ? `
+                                        <button class="btn btn-sm btn-primary" onclick="handleText('${item.text}')">
+                                            <i class="fas fa-sms"></i>
+                                        </button>` : ""}
                                 </td>
                             `;
                             helplineList.appendChild(tr);
@@ -63,5 +65,14 @@ function callHotline(phone) {
         window.location.href = `tel:${phone}`;
     } else {
         alert(`Please call: ${phone}\n(Note: For desktop, ensure a phone app like Skype is configured for 'tel:' links)`);
+    }
+}
+
+function handleText(number) {
+    const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|BlackBerry/i.test(navigator.userAgent);
+    if (isMobile) {
+        window.location.href = `sms:${number}`;
+    } else {
+        alert(`Please use your mobile device to send an SMS to: ${number}`);
     }
 }
