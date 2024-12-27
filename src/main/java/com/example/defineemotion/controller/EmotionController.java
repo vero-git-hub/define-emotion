@@ -109,7 +109,21 @@ public class EmotionController {
     }
 
     @GetMapping("/emotions/chart")
-    public String showEmotionChart() {
+    public String showEmotionChart(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (username == null || username.equals("anonymousUser")) {
+            model.addAttribute("errorMessage", "User not authenticated");
+            return "error";
+        }
+
+        List<EmotionResponseDto> emotionList = emotionService.getEmotionsByUsername(username);
+
+        if (emotionList == null) {
+            emotionList = List.of();
+        }
+
+        model.addAttribute("emotions", emotionList);
         return "chart";
     }
 

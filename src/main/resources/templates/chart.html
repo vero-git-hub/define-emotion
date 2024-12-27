@@ -16,11 +16,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
 <body>
-    <div th:replace="header :: header"></div>
+    <div th:replace="~{header :: header}"></div>
 
     <div class="container mt-4">
         <h1 class="text-center">Your Emotion Chart</h1>
-        <canvas id="emotionChart" style="max-width: 100%; max-height: 400px;"></canvas>
+
+        <div th:if="${emotions == null || emotions.isEmpty()}">
+            <div class="alert alert-info text-center mt-4">
+                <h3>No emotions found!</h3>
+                <p>Track and analyze your feelings by adding emotions.</p>
+            </div>
+        </div>
+    
+        <div th:if="${emotions != null && !emotions.isEmpty()}">
+            <canvas id="emotionChart" style="max-width: 100%; max-height: 400px;"></canvas>
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="location.href='/'" class="btn btn-secondary me-2" title="Back to Home">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="/emotions/input" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Emotion
+            </a>
+        </div>
     </div>
 </body>
 </html>

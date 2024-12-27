@@ -15,7 +15,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 </head>
 <body>
-    <div th:replace="header :: header"></div>
+    <div th:replace="~{header :: header}"></div>
 
     <div class="container mt-4">
         <h1>Emotion List</h1>
@@ -30,7 +30,6 @@
             <div class="alert alert-info text-center mt-4">
                 <h3>No emotions found!</h3>
                 <p>Try adding some emotions to track and analyze your feelings.</p>
-                <a href="/emotions/input" class="btn btn-primary">Add Emotion</a>
             </div>
         </div>
 
@@ -72,7 +71,9 @@
             <button onclick="location.href='/'" class="btn btn-secondary me-2" title="Back to Home">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <a href="/emotions/input" class="btn btn-primary">Add Emotion</a>
+            <a href="/emotions/input" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Emotion
+            </a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

@@ -5,8 +5,3 @@
     display: block;
     aspect-ratio: 1 / 1;
 }
-
-.container {
-    max-width: 500px;
-    margin: auto;
-}

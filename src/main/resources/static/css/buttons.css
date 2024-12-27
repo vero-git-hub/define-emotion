@@ -62,7 +62,16 @@
 }
 
 .btn-info {
-    border: none;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #21bad9;
+}
+
+.btn-info:hover {
+    color: #fff !important;
+}
+
+.btn-info, .btn-warning, .btn-danger {
+    font-size: 1rem;
     padding: 10px 20px;
     border-radius: 5px;
     margin: 5px;
