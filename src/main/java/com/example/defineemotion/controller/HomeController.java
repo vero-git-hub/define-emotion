@@ -46,13 +46,13 @@ public class HomeController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "/auth/login";
     }
 
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("registerUser", new RegisterUserDto());
-        return "register";
+        return "/auth/register";
     }
 
     @PostMapping("/register")
@@ -61,12 +61,12 @@ public class HomeController {
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "/auth/register";
         }
         boolean isRegistered = userService.registerUser(registerUserDto);
         if (!isRegistered) {
             model.addAttribute("error", "Username or email already taken.");
-            return "register";
+            return "/auth/register";
         }
         return "redirect:/login";
     }

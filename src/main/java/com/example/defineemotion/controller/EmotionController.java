@@ -41,7 +41,7 @@ public class EmotionController {
     @GetMapping("/emotions/input")
     public String showAddEmotionForm(Model model) {
         model.addAttribute("activePage", "add-emotion");
-        return "add-emotion";
+        return "crud/add-emotion";
     }
 
     @PostMapping("/emotions/input")
