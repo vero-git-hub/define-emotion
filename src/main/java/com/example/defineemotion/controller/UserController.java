@@ -40,6 +40,7 @@ public class UserController {
             }
         }
 
+        model.addAttribute("activePage", "profile");
         return "profile";
     }
 

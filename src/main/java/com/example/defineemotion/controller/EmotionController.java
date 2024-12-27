@@ -124,6 +124,7 @@ public class EmotionController {
         }
 
         model.addAttribute("emotions", emotionList);
+        model.addAttribute("activePage", "chart");
         return "chart";
     }
 
