@@ -63,11 +63,9 @@
                 </div>
                 <div class="modal-body">
                     <div th:if="${hasAddress}">
-                        <p><strong>Your Address:</strong></p>
-                        <ul>
-                            <li>Country: <span id="countryInput" th:text="${country}">-</span></li>
-                            <li>City: <span id="cityInput" th:text="${city}">-</span></li>
-                        </ul>
+                        <p><strong>Your Address:</strong>
+                            <span id="countryInput" th:text="${country}"></span>, <span id="cityInput" th:text="${city}"</span>
+                        </p>
                         <button class="btn btn-primary" id="helpBtn">Help</button>
                         <div id="helplineResults" style="display: none; margin-top: 20px;">
                             <h5>Available Helplines:</h5>

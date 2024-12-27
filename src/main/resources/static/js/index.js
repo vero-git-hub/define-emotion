@@ -31,8 +31,10 @@ document.addEventListener("DOMContentLoaded", function() {
                             tr.innerHTML = `
                                 <td>${item.name}</td>
                                 <td>
-                                    ${item.phone ? `<a class="btn btn-sm btn-success" href="tel:${item.phone}">
-                                        <i class="fas fa-phone-alt"></i></a>` : ""}
+                                    ${item.phone ? `
+                                        <button class="btn btn-sm btn-success" onclick="callHotline('${item.phone}')">
+                                            <i class="fas fa-phone-alt"></i> Call
+                                        </button>` : ""}
                                 </td>
                                 <td>
                                     ${item.website ? `<a class="btn btn-sm btn-primary ms-2" href="${item.website}" target="_blank">
@@ -60,6 +62,6 @@ function callHotline(phone) {
     if (isMobile) {
         window.location.href = `tel:${phone}`;
     } else {
-        alert(`Calling ${phone}...\n(Note: Actual call functionality requires WebRTC or external services.)`);
+        alert(`Please call: ${phone}\n(Note: For desktop, ensure a phone app like Skype is configured for 'tel:' links)`);
     }
 }
