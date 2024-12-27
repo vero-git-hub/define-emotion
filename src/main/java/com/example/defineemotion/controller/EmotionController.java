@@ -1,10 +1,12 @@
 package com.example.defineemotion.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -13,12 +15,15 @@ import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class EmotionController {
     
     private final EmotionService emotionService;
@@ -106,5 +111,14 @@ public class EmotionController {
     @GetMapping("/emotions/chart")
     public String showEmotionChart() {
         return "chart";
+    }
+
+    @PostMapping("/emotions/analyze")
+    public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
+        String text = request.get("text");
+        if (text == null || text.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
+        }
+        return ResponseEntity.ok(Map.of("result", "Happiness"));
     }
 }
