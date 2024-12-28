@@ -28,22 +28,25 @@
                     <p>Welcome, <span sec:authentication="name"></span>!</p>
                     <div>
                         <a href="/emotions" class="btn btn-primary">
-                            <i class="fas fa-list"></i> View Emotions
+                            <i class="fas fa-list"></i> Emotion List
                         </a>
                         <a href="/emotions/input" class="btn btn-success">
                             <i class="fas fa-plus"></i> Add Emotion
                         </a>
+                        <a href="/emotions/chart" class="btn btn-success">
+                            <i class="fas fa-chart-pie"></i> Chart
+                        </a>
                         <a href="/profile" class="btn btn-info">
                             <i class="fas fa-user"></i> Profile
                         </a>
+                        <button type="button" class="btn btn-warning ms-2" data-bs-toggle="modal" data-bs-target="#emergencyModal">
+                            <i class="fas fa-exclamation-triangle"></i> Emergency
+                        </button>
                         <form th:action="@{/logout}" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </button>
                         </form>
-                        <button type="button" class="btn btn-warning ms-2" data-bs-toggle="modal" data-bs-target="#emergencyModal">
-                            <i class="fas fa-exclamation-triangle"></i> Emergency
-                        </button>
                     </div>
                 </div>
                 <div sec:authorize="!isAuthenticated()">

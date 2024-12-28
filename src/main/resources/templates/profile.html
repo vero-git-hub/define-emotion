@@ -77,7 +77,7 @@
                 </form>
             </div>
         </div>
-        <div class="text-center mt-4">
+        <div th:if="${editMode == null || !editMode}" class="text-center mt-4">
             <button onclick="location.href='/'" class="btn btn-secondary me-2" title="Back to Home">
                 <i class="fas fa-arrow-left"></i>
             </button>

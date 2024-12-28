@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <td>
                                     ${item.phone ? `
                                         <button class="btn btn-sm btn-success" 
-                                                onclick="handleCall('${item.phone}')" 
+                                                onclick="callHotline('${item.phone}')" 
                                                 title="Call ${item.phone}">
                                             <i class="fas fa-phone-alt"></i>
                                         </button>` : ""}
