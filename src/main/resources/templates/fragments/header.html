@@ -6,7 +6,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/}" th:classappend="${activePage == 'home' ? 'active' : ''}">Home</a>
                     </li>
@@ -18,21 +18,25 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/emotions/chart}" th:classappend="${activePage == 'chart' ? 'active' : ''}">Chart</a>
-                    </li> 
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/profile}" th:classappend="${activePage == 'profile' ? 'active' : ''}">Profile</a>
                     </li>
                 </ul>
-                <div class="d-flex ms-auto align-items-center">
-                    <button class="btn btn-warning emergency-button me-2" type="button" data-bs-toggle="modal" data-bs-target="#emergencyModal">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </button>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn btn-danger logout-button">
-                            <i class="fas fa-sign-out-alt"></i>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-warning emergency-button me-2" type="button" data-bs-toggle="modal" data-bs-target="#emergencyModal">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </button>
-                    </form>
-                </div>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger logout-button">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
