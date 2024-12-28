@@ -1,0 +1,36 @@
+<div th:fragment="modal(id, title, hasAddress, country, city)" class="modal fade" id="emergencyModal" tabindex="-1" aria-labelledby="emergencyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emergencyModalLabel">Emergency Assistance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div th:if="${hasAddress}">
+                    <p><strong>Your Address:</strong>
+                        <span id="countryInput" th:text="${country}"></span>, <span id="cityInput" th:text="${city}"</span>
+                    </p>
+                    <button class="btn btn-primary" id="helpBtn">Help</button>
+                    <div id="helplineResults" style="display: none; margin-top: 20px;">
+                        <h5>Available Helplines:</h5>
+                        <table id="helplineList">
+                            <tr>
+                                <th>Organization</th>
+                                <th>Call</th>
+                                <th>Website</th>
+                                <th>Text</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div th:if="${!hasAddress}">
+                    <p>You need to specify your country and city.</p>
+                    <a th:href="@{/profile(editMode=true)}" class="btn btn-secondary">Go to Profile</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

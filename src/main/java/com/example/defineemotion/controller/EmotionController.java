@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,13 +23,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/emotions")
 @RequiredArgsConstructor
 @Slf4j
 public class EmotionController {
     
     private final EmotionService emotionService;
 
-    @GetMapping("/emotions")
+    @GetMapping
     public String showEmotionList(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -40,16 +42,16 @@ public class EmotionController {
         model.addAttribute("activePage", "view-emotions");
         model.addAttribute("emotions", emotionService.getAllEmotions(username).orElse(List.of()));
         
-        return "emotions";
+        return "emotions/list";
     }
 
-    @GetMapping("/emotions/input")
+    @GetMapping("/input")
     public String showAddEmotionForm(Model model) {
         model.addAttribute("activePage", "add-emotion");
         return "crud/add-emotion";
     }
 
-    @PostMapping("/emotions/input")
+    @PostMapping("/input")
     public String processEmotionInput(@RequestParam String text, RedirectAttributes redirectAttributes) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -90,7 +92,7 @@ public class EmotionController {
         }
     }
 
-    @PostMapping("/emotions/delete")
+    @PostMapping("/delete")
     public String deleteEmotion(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         boolean isDeleted = emotionService.deleteEmotionById(id);
         if (!isDeleted) {
@@ -101,14 +103,14 @@ public class EmotionController {
         return "redirect:/emotions";
     }
 
-    @GetMapping("/emotions/chart-data")
+    @GetMapping("/chart-data")
     @ResponseBody
     public List<EmotionResponseDto> getEmotionChartData() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return emotionService.getEmotionsByUsername(username);
     }
 
-    @GetMapping("/emotions/chart")
+    @GetMapping("/chart")
     public String showEmotionChart(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -125,10 +127,10 @@ public class EmotionController {
 
         model.addAttribute("emotions", emotionList);
         model.addAttribute("activePage", "chart");
-        return "chart";
+        return "/emotions/chart";
     }
 
-    @PostMapping("/emotions/analyze")
+    @PostMapping("/analyze")
     public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
         String text = request.get("text");
         if (text == null || text.trim().isEmpty()) {
