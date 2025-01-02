@@ -22,6 +22,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
+
 @Controller
 @RequestMapping("/emotions")
 @RequiredArgsConstructor
@@ -55,22 +66,71 @@ public class EmotionController {
     public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
         String text = request.get("text");
         if (text == null || text.trim().isEmpty()) {
+            log.warn("Empty or null text provided.");
             return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
         }
 
-        String lowerText = analyzeMood(text);
-        return ResponseEntity.ok(Map.of("result", lowerText));
+        try {
+            String mood = analyzeMood(text);
+            return ResponseEntity.ok(Map.of("result", mood));
+        } catch (Exception e) {
+            log.error("Error analyzing text", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Failed to analyze text"));
+        }
     }
 
     private String analyzeMood(String text) {
-        String lowerText = text.toLowerCase();
-
-        if (lowerText.contains("happy") || lowerText.contains("great") || lowerText.contains("good")) {
-            return "Happy";
-        } else if (lowerText.contains("sad") || lowerText.contains("bad")) {
-            return "Sad";
-        } else {
-            return "Neutral";
+        String apiUrl = "api-url";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth("api-token");
+    
+        Map<String, String> body = Map.of("inputs", text);
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
+    
+        RestTemplate restTemplate = new RestTemplate();
+    
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
+    
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.error("Error response from Hugging Face API: {}", response.getBody());
+                return "Error";
+            }
+    
+            String responseBody = response.getBody();
+            if (responseBody == null || responseBody.isEmpty()) {
+                log.error("Empty response received from Hugging Face API");
+                return "Error";
+            }
+    
+            JSONArray rootArray = new JSONArray(responseBody);
+            if (rootArray.isEmpty()) {
+                log.error("Empty result array from Hugging Face API");
+                return "Error";
+            }
+    
+            JSONArray resultArray = rootArray.getJSONArray(0);
+            if (resultArray.isEmpty()) {
+                log.error("Empty emotions array from Hugging Face API");
+                return "Error";
+            }
+    
+            JSONObject topEmotion = resultArray.getJSONObject(0);
+            String label = topEmotion.getString("label");
+    
+            return label;
+    
+        } catch (HttpServerErrorException e) {
+            log.error("Error communicating with Hugging Face API: {}", e.getMessage());
+            return "Error";
+        } catch (JSONException e) {
+            log.error("Error parsing JSON response: {}", e.getMessage());
+            return "Error";
+        } catch (Exception e) {
+            log.error("Unexpected error during analysis: {}", e.getMessage());
+            return "Error";
         }
     }
 
@@ -84,7 +144,7 @@ public class EmotionController {
         }
 
         try {
-            String mood = emotionResult != null ? emotionResult : "Neutral";
+            String mood = emotionResult != null ? emotionResult : "neutral";
             Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood, username);
 
             if (addedEmotion.isEmpty()) {
@@ -136,5 +196,4 @@ public class EmotionController {
         model.addAttribute("activePage", "chart");
         return "/emotions/chart";
     }
-
 }
