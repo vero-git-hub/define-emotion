@@ -30,7 +30,7 @@ public class EmotionController {
     
     private final EmotionService emotionService;
 
-    @GetMapping
+    @GetMapping("/list")
     public String showEmotionList(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -42,7 +42,7 @@ public class EmotionController {
         model.addAttribute("activePage", "view-emotions");
         model.addAttribute("emotions", emotionService.getAllEmotions(username).orElse(List.of()));
         
-        return "emotions/list";
+        return "/emotions/list";
     }
 
     @GetMapping("/input")
@@ -57,7 +57,7 @@ public class EmotionController {
 
         if (username == null || "anonymousUser".equals(username)) {
             redirectAttributes.addFlashAttribute("errorMessage", "User must be authenticated");
-            return "redirect:/emotions"; 
+            return "error"; 
         }
 
         try {
@@ -73,7 +73,7 @@ public class EmotionController {
             return "redirect:/emotions/input";
         }
 
-        return "redirect:/emotions";
+        return "redirect:/emotions/list";
     }
 
     private String analyzeMood(String text) {
@@ -100,7 +100,7 @@ public class EmotionController {
         } else {
             redirectAttributes.addFlashAttribute("successMessage", "Emotion successfully deleted.");
         }
-        return "redirect:/emotions";
+        return "redirect:/emotions/list";
     }
 
     @GetMapping("/chart-data")

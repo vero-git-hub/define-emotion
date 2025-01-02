@@ -27,16 +27,16 @@
                 <div sec:authorize="isAuthenticated()">
                     <p>Welcome, <span sec:authentication="name"></span>!</p>
                     <div>
-                        <a href="/emotions" class="btn btn-primary">
+                        <a th:href="@{/emotions/list}" class="btn btn-primary">
                             <i class="fas fa-list"></i> Emotion List
                         </a>
-                        <a href="/emotions/input" class="btn btn-success">
+                        <a th:href="@{/emotions/input}" class="btn btn-success">
                             <i class="fas fa-plus"></i> Add Emotion
                         </a>
-                        <a href="/emotions/chart" class="btn btn-success">
+                        <a th:href="@{/emotions/chart}" class="btn btn-success">
                             <i class="fas fa-chart-pie"></i> Chart
                         </a>
-                        <a href="/profile" class="btn btn-info">
+                        <a th:href="@{/profile}" class="btn btn-info">
                             <i class="fas fa-user"></i> Profile
                         </a>
                         <button type="button" class="btn btn-warning ms-2" data-bs-toggle="modal" data-bs-target="#emergencyModal">
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div th:replace="fragments/modal :: modal('emergencyModal', 'Emergency Assistance', ${hasAddress}, ${country}, ${city})"></div>
+    <div th:replace="~{fragments/modal :: modal('emergencyModal', 'Emergency Assistance', ${hasAddress}, ${country}, ${city})}"></div>
 
     <script th:inline="javascript">
         /*<![CDATA[*/

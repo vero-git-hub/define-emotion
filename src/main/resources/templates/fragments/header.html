@@ -11,7 +11,7 @@
                         <a class="nav-link" th:href="@{/}" th:classappend="${activePage == 'home' ? 'active' : ''}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/emotions}" th:classappend="${activePage == 'view-emotions' ? 'active' : ''}">Emotion List</a>
+                        <a class="nav-link" th:href="@{/emotions/list}" th:classappend="${activePage == 'view-emotions' ? 'active' : ''}">Emotion List</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/emotions/input}" th:classappend="${activePage == 'add-emotion' ? 'active' : ''}">Add Emotion</a>
@@ -41,7 +41,7 @@
         </div>
     </nav>
 
-    <div th:replace="fragments/modal :: modal('emergencyModal', 'Emergency Assistance', ${hasAddress}, ${country}, ${city})"></div>
+    <div th:replace="~{fragments/modal :: modal('emergencyModal', 'Emergency Assistance', ${hasAddress}, ${country}, ${city})}"></div>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
