@@ -51,8 +51,31 @@ public class EmotionController {
         return "crud/add-emotion";
     }
 
+    @PostMapping("/analyze")
+    public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
+        String text = request.get("text");
+        if (text == null || text.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
+        }
+
+        String lowerText = analyzeMood(text);
+        return ResponseEntity.ok(Map.of("result", lowerText));
+    }
+
+    private String analyzeMood(String text) {
+        String lowerText = text.toLowerCase();
+
+        if (lowerText.contains("happy") || lowerText.contains("great") || lowerText.contains("good")) {
+            return "Happy";
+        } else if (lowerText.contains("sad") || lowerText.contains("bad")) {
+            return "Sad";
+        } else {
+            return "Neutral";
+        }
+    }
+
     @PostMapping("/input")
-    public String processEmotionInput(@RequestParam String text, RedirectAttributes redirectAttributes) {
+    public String saveEmotion(@RequestParam String text, @RequestParam(required = false) String emotionResult, RedirectAttributes redirectAttributes) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if (username == null || "anonymousUser".equals(username)) {
@@ -61,7 +84,7 @@ public class EmotionController {
         }
 
         try {
-            String mood = analyzeMood(text);
+            String mood = emotionResult != null ? emotionResult : "Neutral";
             Optional<EmotionResponseDto> addedEmotion = emotionService.addEmotion(text, mood, username);
 
             if (addedEmotion.isEmpty()) {
@@ -74,22 +97,6 @@ public class EmotionController {
         }
 
         return "redirect:/emotions/list";
-    }
-
-    private String analyzeMood(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            throw new IllegalArgumentException("Text cannot be empty");
-        }
-
-        String lowerText = text.toLowerCase();
-
-        if (lowerText.contains("happy") || lowerText.contains("great") || lowerText.contains("good")) {
-            return "Happy";
-        } else if (lowerText.contains("sad") || lowerText.contains("bad")) {
-            return "Sad";
-        } else {
-            return "Neutral";
-        }
     }
 
     @PostMapping("/delete")
@@ -130,12 +137,4 @@ public class EmotionController {
         return "/emotions/chart";
     }
 
-    @PostMapping("/analyze")
-    public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
-        String text = request.get("text");
-        if (text == null || text.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
-        }
-        return ResponseEntity.ok(Map.of("result", "Happiness"));
-    }
 }

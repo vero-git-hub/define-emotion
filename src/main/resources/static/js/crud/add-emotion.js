@@ -21,10 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const text = textInput.value.trim();
 
             if (!text) {
-                analysisResults.style.display = "block";
-                analysisResults.classList.remove("alert-info");
-                analysisResults.classList.add("alert-danger");
-                analysisResults.textContent = "Please enter some text for analysis.";
+                showError("Please enter some text for analysis.");
                 return;
             }
 
@@ -48,16 +45,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     analysisResults.classList.add("alert-info");
                     analysisResults.textContent = `Analysis Result: ${data.result}`;
 
+                    const emotionResult = document.getElementById("emotionResult");
+                    emotionResult.value = data.result;
+
                     textInput.disabled = true;
                     saveSection.style.display = "block";
                     mainButtons.style.display = "none";
                 })
                 .catch(error => {
                     console.error("Error analyzing text:", error);
-                    analysisResults.style.display = "block";
-                    analysisResults.classList.remove("alert-info");
-                    analysisResults.classList.add("alert-danger");
-                    analysisResults.textContent = "Error analyzing the text. Please try again later.";
+                    showError("Error analyzing the text. Please try again later.");
                 });
         });
     }
@@ -72,3 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function showError(message) {
+    const analysisResults = document.getElementById("analysisResults");
+    analysisResults.style.display = "block";
+    analysisResults.classList.remove("alert-info");
+    analysisResults.classList.add("alert-danger");
+    analysisResults.textContent = message;
+}
