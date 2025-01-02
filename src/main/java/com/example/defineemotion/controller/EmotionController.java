@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.defineemotion.dto.EmotionResponseDto;
+import com.example.defineemotion.service.EmotionAnalysisService;
 import com.example.defineemotion.service.EmotionService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,16 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpEntity;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping("/emotions")
@@ -40,6 +32,7 @@ import org.springframework.web.client.RestTemplate;
 public class EmotionController {
     
     private final EmotionService emotionService;
+    private final EmotionAnalysisService emotionAnalysisService;
 
     @GetMapping("/list")
     public String showEmotionList(Model model) {
@@ -71,66 +64,12 @@ public class EmotionController {
         }
 
         try {
-            String mood = analyzeMood(text);
+            String mood = emotionAnalysisService.analyzeMood(text);
             return ResponseEntity.ok(Map.of("result", mood));
         } catch (Exception e) {
             log.error("Error analyzing text", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "Failed to analyze text"));
-        }
-    }
-
-    private String analyzeMood(String text) {
-        String apiUrl = "api-url";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth("api-token");
-    
-        Map<String, String> body = Map.of("inputs", text);
-        HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
-    
-        RestTemplate restTemplate = new RestTemplate();
-    
-        try {
-            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
-    
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                log.error("Error response from Hugging Face API: {}", response.getBody());
-                return "Error";
-            }
-    
-            String responseBody = response.getBody();
-            if (responseBody == null || responseBody.isEmpty()) {
-                log.error("Empty response received from Hugging Face API");
-                return "Error";
-            }
-    
-            JSONArray rootArray = new JSONArray(responseBody);
-            if (rootArray.isEmpty()) {
-                log.error("Empty result array from Hugging Face API");
-                return "Error";
-            }
-    
-            JSONArray resultArray = rootArray.getJSONArray(0);
-            if (resultArray.isEmpty()) {
-                log.error("Empty emotions array from Hugging Face API");
-                return "Error";
-            }
-    
-            JSONObject topEmotion = resultArray.getJSONObject(0);
-            String label = topEmotion.getString("label");
-    
-            return label;
-    
-        } catch (HttpServerErrorException e) {
-            log.error("Error communicating with Hugging Face API: {}", e.getMessage());
-            return "Error";
-        } catch (JSONException e) {
-            log.error("Error parsing JSON response: {}", e.getMessage());
-            return "Error";
-        } catch (Exception e) {
-            log.error("Unexpected error during analysis: {}", e.getMessage());
-            return "Error";
         }
     }
 
