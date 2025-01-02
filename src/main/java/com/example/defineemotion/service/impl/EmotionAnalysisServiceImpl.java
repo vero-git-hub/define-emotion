@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,20 +37,50 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
         HttpHeaders headers = createHeaders();
         HttpEntity<Map<String, String>> request = createRequest(text, headers);
         RestTemplate restTemplate = new RestTemplate();
+        int maxRetries = 5;
+        int retryCount = 0;
+        int waitTime = 5000;
 
-        try {
-            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
-            return processResponse(response);
-        } catch (HttpServerErrorException | HttpClientErrorException e) {
-            log.error("HTTP Error communicating with Hugging Face API: {} - {}", e.getStatusCode(), e.getMessage());
-            return "Error: Unable to process your request at the moment. Please try again later.";
-        } catch (JSONException e) {
-            log.error("JSON Parsing Error: {}", e.getMessage());
-            return "Error: Unable to parse the response from the emotion analysis service.";
-        } catch (Exception e) {
-            log.error("Unexpected Error during emotion analysis: {}", e.getMessage());
-            return "Error: An unexpected error occurred. Please try again later.";
+        while (retryCount < maxRetries) {
+            try {
+                log.info("Attempt {} to analyze text using Hugging Face API.", retryCount + 1);
+                ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
+
+                if (response.getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE) {
+                    log.warn("Model is currently loading. Waiting for {} ms before retrying...", waitTime);
+                    Thread.sleep(waitTime);
+                    retryCount++;
+                    continue;
+                }
+
+                return processResponse(response);
+
+            } catch (HttpServerErrorException | HttpClientErrorException e) {
+                if (e.getStatusCode().value() == 503) {
+                    log.warn("Model loading detected (503 Service Unavailable). Retrying...");
+                    retryCount++;
+                    try {
+                        Thread.sleep(waitTime);
+                    } catch (InterruptedException interruptedException) {
+                        Thread.currentThread().interrupt();
+                        log.error("Interrupted while waiting to retry: {}", interruptedException.getMessage());
+                        return "Error: Interrupted during retry process.";
+                    }
+                } else {
+                    log.error("HTTP Error communicating with Hugging Face API: {} - {}", e.getStatusCode(), e.getMessage());
+                    return "Error: Unable to process your request at the moment. Please try again later.";
+                }
+            } catch (JSONException e) {
+                log.error("JSON Parsing Error: {}", e.getMessage());
+                return "Error: Unable to parse the response from the emotion analysis service.";
+            } catch (Exception e) {
+                log.error("Unexpected Error during emotion analysis: {}", e.getMessage());
+                return "Error: An unexpected error occurred. Please try again later.";
+            }
         }
+
+        log.error("Max retries reached. Unable to analyze text.");
+        return "Error: The service is currently unavailable. Please try again later.";
     }
 
     private HttpHeaders createHeaders() {
