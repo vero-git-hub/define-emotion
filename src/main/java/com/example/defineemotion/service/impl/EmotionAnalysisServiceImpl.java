@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.defineemotion.service.EmotionAnalysisService;
+import com.example.defineemotion.util.TextValidator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,15 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
     @Value("${huggingface.emotion.api.token}")
     private String apiToken;
 
+    private final TextValidator textValidator;
+
     @Override
     public String analyzeMood(String text) {
+        if (!textValidator.isValid(text)) {
+            log.warn("Invalid input detected: {}", text);
+            throw new IllegalArgumentException("Invalid input. Please enter meaningful text with at least 3 characters.");
+        }
+
         HttpHeaders headers = createHeaders();
         HttpEntity<Map<String, String>> request = createRequest(text, headers);
         RestTemplate restTemplate = new RestTemplate();

@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
         analyzeBtn.addEventListener("click", function () {
             const text = textInput.value.trim();
 
-            if (!text) {
-                showError("Please enter some text for analysis.");
+            if (!isValidText(text)) {
+                showError("Invalid input. Please enter meaningful text with at least 3 characters.");
                 return;
             }
 
@@ -77,6 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function isValidText(text) {
+    const sanitizedText = text.replaceAll(/[^a-zA-Z0-9\s]/g, "").trim();
+    return sanitizedText.length >= 3;
+}
 
 function showError(message) {
     const analysisResults = document.getElementById("analysisResults");

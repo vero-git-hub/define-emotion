@@ -16,6 +16,7 @@ import com.example.defineemotion.dto.EmotionResponseDto;
 import com.example.defineemotion.service.EmotionAdviceService;
 import com.example.defineemotion.service.EmotionAnalysisService;
 import com.example.defineemotion.service.EmotionService;
+import com.example.defineemotion.util.TextValidator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class EmotionController {
     private final EmotionService emotionService;
     private final EmotionAnalysisService emotionAnalysisService;
     private final EmotionAdviceService emotionAdviceService;
+    private final TextValidator textValidator;
 
     @GetMapping("/list")
     public String showEmotionList(Model model) {
@@ -60,8 +62,11 @@ public class EmotionController {
     @PostMapping("/analyze")
     public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
         String text = request.get("text");
-        if (text == null || text.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
+        
+        if (!textValidator.isValid(text)) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "Invalid input. Please enter meaningful text with at least 3 characters."
+            ));
         }
 
         try {
