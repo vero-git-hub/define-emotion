@@ -38,7 +38,7 @@
                             <th>ID</th>
                             <th>Feeling</th>
                             <th>Mood</th>
-                            <th>Timestamp</th>
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -47,7 +47,7 @@
                         <td th:text="${emotion.id}">1</td>
                         <td th:text="${emotion.text}">Happy example</td>
                         <td th:text="${emotion.mood}">Happy</td>
-                        <td th:text="${emotion.timestamp}">2024-01-01</td>
+                        <td th:text="${emotion.formattedTimestamp()}"></td>
                         <td>
                             <form th:action="@{/emotions/delete}" method="post" class="delete-form d-inline">
                                 <input type="hidden" name="id" th:value="${emotion.id}" />
