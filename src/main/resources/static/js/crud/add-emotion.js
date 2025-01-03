@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const csrfToken = document.querySelector('input[name="_csrf"]').value;
     const saveBtn = document.getElementById("saveBtn");
     const form = document.querySelector("form");
+    const loadingIndicator = document.getElementById("loadingIndicator");
 
     if (saveBtn) {
         saveBtn.addEventListener("click", function () {
@@ -25,6 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            loadingIndicator.style.display = "block";
+            analysisResults.style.display = "none";
+
             fetch("/emotions/analyze", {
                 method: "POST",
                 headers: {
@@ -40,6 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then(data => {
+                    loadingIndicator.style.display = "none";
+
                     if (data.error) {
                         showError(data.error);
                         return;
@@ -61,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     mainButtons.style.display = "none";
                 })
                 .catch(error => {
+                    loadingIndicator.style.display = "none";
                     console.error("Error analyzing text:", error);
                     showError("Error analyzing the text. Please try again later.");
                 });

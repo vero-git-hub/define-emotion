@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/css/emotions.css">
     <link rel="stylesheet" type="text/css" href="/css/buttons.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/crud/add-emotion.css">
 </head>
 <body>
     <div th:replace="~{fragments/header :: header}"></div>
@@ -29,6 +30,10 @@
                 <label for="textInput" class="form-label">Enter your text</label>
                 <textarea id="textInput" name="text" class="form-control" rows="4" placeholder="Write something here..." required></textarea>
             </div>
+
+            <div id="loadingIndicator" style="display: none; text-align: center;">
+                <img src="/images/loading-spinner.gif" alt="Loading...">
+            </div>            
         
             <div id="analysisResults" class="alert alert-info text-center" style="display: none;"></div>
         
