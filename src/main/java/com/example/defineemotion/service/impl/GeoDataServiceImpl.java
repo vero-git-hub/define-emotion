@@ -26,7 +26,7 @@ public class GeoDataServiceImpl implements GeoDataService {
 
     @PostConstruct
     public void init() {
-        try (InputStream is = getClass().getResourceAsStream("/countries-cities.json")) {
+        try (InputStream is = getClass().getResourceAsStream("/country-cities.json")) {
             ObjectMapper objectMapper = new ObjectMapper();
             List<CountryCities> data = objectMapper.readValue(is, new TypeReference<>() {});
             geoData.addAll(data);

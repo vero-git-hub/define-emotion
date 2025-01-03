@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.defineemotion.dto.EmotionResponseDto;
+import com.example.defineemotion.service.EmotionAdviceService;
 import com.example.defineemotion.service.EmotionAnalysisService;
 import com.example.defineemotion.service.EmotionService;
 
@@ -33,6 +34,7 @@ public class EmotionController {
     
     private final EmotionService emotionService;
     private final EmotionAnalysisService emotionAnalysisService;
+    private final EmotionAdviceService emotionAdviceService;
 
     @GetMapping("/list")
     public String showEmotionList(Model model) {
@@ -59,13 +61,13 @@ public class EmotionController {
     public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
         String text = request.get("text");
         if (text == null || text.trim().isEmpty()) {
-            log.warn("Empty or null text provided.");
             return ResponseEntity.badRequest().body(Map.of("error", "Text is required"));
         }
 
         try {
             String mood = emotionAnalysisService.analyzeMood(text);
-            return ResponseEntity.ok(Map.of("result", mood));
+            String advice = emotionAdviceService.getAdvice(mood);
+            return ResponseEntity.ok(Map.of("result", mood, "advice", advice));
         } catch (Exception e) {
             log.error("Error analyzing text", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

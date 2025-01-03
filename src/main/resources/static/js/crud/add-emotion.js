@@ -40,10 +40,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then(data => {
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+
                     analysisResults.style.display = "block";
                     analysisResults.classList.remove("alert-danger");
                     analysisResults.classList.add("alert-info");
-                    analysisResults.textContent = `Analysis Result: ${data.result}`;
+                    analysisResults.innerHTML = `
+                        <strong>Analysis Result:</strong> ${data.result}<br>
+                        <strong>Advice:</strong> ${data.advice}
+                    `;
 
                     const emotionResult = document.getElementById("emotionResult");
                     emotionResult.value = data.result;
