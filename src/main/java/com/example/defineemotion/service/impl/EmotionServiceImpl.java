@@ -24,6 +24,13 @@ public class EmotionServiceImpl implements EmotionService {
     private final EmotionMapper emotionMapper;
     private final UserRepository userRepository;
 
+    /**
+     * Adds a new emotion to the database.
+     * @param text the text of the emotion
+     * @param mood the mood of the emotion
+     * @param username the username of the user
+     * @return an optional containing the emotion response DTO if the emotion was added successfully, empty otherwise
+     */
     @Override
     public Optional<EmotionResponseDto> addEmotion(String text, String mood, String username) {
         if (text == null || text.trim().isEmpty()) {
@@ -42,6 +49,11 @@ public class EmotionServiceImpl implements EmotionService {
         return Optional.of(emotionMapper.toDto(savedEmotion));
     }
 
+    /**
+     * Retrieves all emotions for the given user.
+     * @param username the username of the user
+     * @return an optional containing a list of emotion response DTOs if the user has emotions, empty otherwise
+     */
     @Override
     public Optional<List<EmotionResponseDto>> getAllEmotions(String username) {
         if (username == null || username.isEmpty()) {
@@ -58,6 +70,11 @@ public class EmotionServiceImpl implements EmotionService {
         return emotions.isEmpty() ? Optional.empty() : Optional.of(emotions);
     }
 
+    /**
+     * Deletes an emotion by ID.
+     * @param id the ID of the emotion to delete
+     * @return true if the emotion was deleted successfully, false otherwise
+     */
     @Override
     public boolean deleteEmotionById(Long id) {
         if (emotionRepository.existsById(id)) {
@@ -67,6 +84,11 @@ public class EmotionServiceImpl implements EmotionService {
         return false;
     }
 
+    /**
+     * Retrieves all emotions for the given user.
+     * @param username the username of the user
+     * @return a list of emotion response DTOs
+     */
     @Override
     public List<EmotionResponseDto> getEmotionsByUsername(String username) {
         User user = userRepository.findByUsername(username)

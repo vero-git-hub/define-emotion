@@ -22,6 +22,12 @@ public class UserController {
     private final UserService userService;
     private final GeoDataService geoDataService;
 
+    /**
+     * Shows the user profile page.
+     * @param editMode whether the user is in edit mode
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/profile")
     public String userProfile(@RequestParam(value = "editMode", required = false) Boolean editMode, 
                             Model model) {
@@ -44,6 +50,13 @@ public class UserController {
         return "profile";
     }
 
+    /**
+     * Updates the user profile.
+     * @param editProfileDto the user profile to update
+     * @param bindingResult the binding result
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @PostMapping("/profile")
     public String updateUserProfile(@Valid @ModelAttribute("user") EditProfileDto editProfileDto,
                                      BindingResult bindingResult,

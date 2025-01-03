@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class EditProfileDto {
+    
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be in a valid format")
     private String email;

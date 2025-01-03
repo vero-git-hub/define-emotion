@@ -9,6 +9,9 @@ import com.example.defineemotion.model.User;
 @Component
 public class UserMapperImpl implements UserMapper {
 
+    /**
+     * Converts a register user DTO to a user entity.
+     */
     @Override
     public User toEntity(RegisterUserDto dto) {
         if (dto == null) {
@@ -22,6 +25,9 @@ public class UserMapperImpl implements UserMapper {
         return user;
     }
 
+    /**
+     * Converts a user entity to a register user DTO.
+     */
     @Override
     public RegisterUserDto toDto(User user) {
         if (user == null) {

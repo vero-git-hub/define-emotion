@@ -5,18 +5,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.defineemotion.service.UserService;
 
+import lombok.AllArgsConstructor;
+
 import org.springframework.ui.Model;
 import java.security.Principal;
 
 @ControllerAdvice
+@AllArgsConstructor
 public class GlobalControllerAdvice {
 
     private final UserService userService;
 
-    public GlobalControllerAdvice(UserService userService) {
-        this.userService = userService;
-    }
-
+    /**
+     * Adds user attributes to the model.
+     * @param model the model to add attributes to
+     * @param principal the principal to get the user from
+     */
     @ModelAttribute
     public void addUserAttributes(Model model, Principal principal) {
         if (principal != null) {

@@ -18,6 +18,11 @@ public class GeoController {
     
     private final GeoDataService geoDataService;
 
+    /**
+     * Returns a list of all cities for the given country.
+     * @param country the country to retrieve the cities for
+     * @return a list of all cities for the given country
+     */
     @GetMapping("/cities")
     public List<String> getCities(@RequestParam String country) {
         return geoDataService.getCitiesByCountry(country);

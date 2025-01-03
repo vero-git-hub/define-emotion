@@ -1,0 +1,57 @@
+[
+    {
+        "country": "SampleCountry1",
+        "cities": [
+            {
+                "name": "SampleCity1",
+                "helplines": [
+                    {
+                        "name": "Sample Helpline 1",
+                        "phone": "123-456-7890",
+                        "website": "https://examplehelpline1.com/"
+                    },
+                    {
+                        "name": "Sample Helpline 2",
+                        "phone": "987-654-3210",
+                        "website": "https://examplehelpline2.com/"
+                    }
+                ]
+            },
+            {
+                "name": "SampleCity2",
+                "helplines": [
+                    {
+                        "name": "Sample Helpline 3",
+                        "phone": "111-222-3333",
+                        "website": "https://examplehelpline3.com/"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "country": "SampleCountry2",
+        "cities": [
+            {
+                "name": "SampleCity3",
+                "helplines": [
+                    {
+                        "name": "Sample Helpline 4",
+                        "phone": "444-555-6666",
+                        "website": "https://examplehelpline4.com/"
+                    }
+                ]
+            },
+            {
+                "name": "SampleCity4",
+                "helplines": [
+                    {
+                        "name": "Sample Helpline 5",
+                        "phone": "777-888-9999",
+                        "website": "https://examplehelpline5.com/"
+                    }
+                ]
+            }
+        ]
+    }
+]

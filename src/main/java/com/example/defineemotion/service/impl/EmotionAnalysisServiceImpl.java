@@ -35,6 +35,12 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
 
     private final TextValidator textValidator;
 
+    /**
+     * Analyzes the mood of the given text using the Hugging Face emotion analysis API.
+     * @param text the text to analyze
+     * @return the mood of the text as a string
+     * @throws IllegalArgumentException if the text is invalid
+     */
     @Override
     public String analyzeMood(String text) {
         if (!textValidator.isValid(text)) {
@@ -91,6 +97,10 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
         return "Error: The service is currently unavailable. Please try again later.";
     }
 
+    /**
+     * Creates the headers for the HTTP request.
+     * @return the headers
+     */
     private HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -98,11 +108,23 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
         return headers;
     }
 
+    /**
+     * Creates the request entity for the HTTP request.
+     * @param text the text to analyze
+     * @param headers the headers for the request
+     * @return the request entity
+     */
     private HttpEntity<Map<String, String>> createRequest(String text, HttpHeaders headers) {
         Map<String, String> body = Map.of("inputs", text);
         return new HttpEntity<>(body, headers);
     }
 
+    /**
+     * Processes the response from the Hugging Face API.
+     * @param response the response entity
+     * @return the mood of the text as a string
+     * @throws JSONException if the response cannot be parsed
+     */
     private String processResponse(ResponseEntity<String> response) throws JSONException {
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.error("Error: Non-successful status received. URL: {}, Status: {}, Response: {}", 

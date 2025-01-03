@@ -38,6 +38,11 @@ public class EmotionController {
     private final EmotionAdviceService emotionAdviceService;
     private final TextValidator textValidator;
 
+    /**
+     * Shows the list of emotions for the authenticated user.
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/list")
     public String showEmotionList(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -53,12 +58,22 @@ public class EmotionController {
         return "/emotions/list";
     }
 
+    /**
+     * Shows the form to add a new emotion.
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/input")
     public String showAddEmotionForm(Model model) {
         model.addAttribute("activePage", "add-emotion");
         return "crud/add-emotion";
     }
 
+    /**
+     * Analyzes the mood of the given text and returns the result.
+     * @param request the request body containing the text to analyze
+     * @return the result of the emotion analysis
+     */
     @PostMapping("/analyze")
     public ResponseEntity<Map<String, String>> analyzeText(@RequestBody Map<String, String> request) {
         String text = request.get("text");
@@ -80,6 +95,13 @@ public class EmotionController {
         }
     }
 
+    /**
+     * Saves the emotion to the database.
+     * @param text the text of the emotion
+     * @param emotionResult the mood of the emotion
+     * @param redirectAttributes the redirect attributes to add messages to
+     * @return the view name
+     */
     @PostMapping("/input")
     public String saveEmotion(@RequestParam String text, @RequestParam(required = false) String emotionResult, RedirectAttributes redirectAttributes) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -105,6 +127,12 @@ public class EmotionController {
         return "redirect:/emotions/list";
     }
 
+    /**
+     * Deletes an emotion by ID.
+     * @param id the ID of the emotion to delete
+     * @param redirectAttributes the redirect attributes to add messages to
+     * @return the view name
+     */
     @PostMapping("/delete")
     public String deleteEmotion(@RequestParam Long id, RedirectAttributes redirectAttributes) {
         boolean isDeleted = emotionService.deleteEmotionById(id);
@@ -116,6 +144,10 @@ public class EmotionController {
         return "redirect:/emotions/list";
     }
 
+    /**
+     * Retrieves the emotion data for the chart.
+     * @return the emotion data
+     */
     @GetMapping("/chart-data")
     @ResponseBody
     public List<EmotionResponseDto> getEmotionChartData() {
@@ -123,6 +155,11 @@ public class EmotionController {
         return emotionService.getEmotionsByUsername(username);
     }
 
+    /**
+     * Shows the emotion chart.
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/chart")
     public String showEmotionChart(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

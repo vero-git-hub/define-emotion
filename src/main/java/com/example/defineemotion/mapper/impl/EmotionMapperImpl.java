@@ -10,6 +10,9 @@ import com.example.defineemotion.model.Emotion;
 @Component
 public class EmotionMapperImpl implements EmotionMapper{
 
+    /**
+     * Converts an emotion entity to an emotion response DTO.
+     */
     @Override
     public EmotionResponseDto toDto(Emotion emotion) {
         return new EmotionResponseDto(
@@ -20,6 +23,9 @@ public class EmotionMapperImpl implements EmotionMapper{
         );
     }
 
+    /**
+     * Converts an emotion request DTO to an emotion entity.
+     */
     @Override
     public Emotion toEntity(EmotionRequestDto dto) {
         Emotion emotion = new Emotion();

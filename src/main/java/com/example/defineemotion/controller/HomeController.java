@@ -22,6 +22,11 @@ public class HomeController {
 
     private final UserService userService;
 
+    /**
+     * Shows the home page.
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/")
     public String showHomePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,17 +49,33 @@ public class HomeController {
         return "index";
     }
 
+    /**
+     * Shows the login page.
+     * @return the view name
+     */
     @GetMapping("/login")
     public String loginPage() {
         return "/auth/login";
     }
 
+    /**
+     * Shows the registration page.
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("registerUser", new RegisterUserDto());
         return "/auth/register";
     }
 
+    /**
+     * Processes the registration form.
+     * @param registerUserDto the user data
+     * @param bindingResult the binding result
+     * @param model the model to add attributes to
+     * @return the view name
+     */
     @PostMapping("/register")
     public String processRegistration(
             @Valid @ModelAttribute("registerUser") RegisterUserDto registerUserDto,

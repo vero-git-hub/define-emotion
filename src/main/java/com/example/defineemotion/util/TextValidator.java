@@ -5,6 +5,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class TextValidator {
     
+    /**
+     * Validates the given text.
+     * @param text the text to validate
+     * @return true if the text is valid, false otherwise
+     */
     public boolean isValid(String text) {
         if (text == null || text.trim().isEmpty()) {
             return false;
